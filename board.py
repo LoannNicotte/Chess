@@ -130,15 +130,62 @@ class Board():
                 chessboard.board[self.selected_piece_pos[0]][self.selected_piece_pos[1]] = self.hand
                 self.hand = None
 
-    
+    def get_square_from_pos(self, pos):
+        """
+        Convert pixel position to board square (row, col).
+        Args:
+            pos (tuple): A tuple (x, y) representing the pixel position.    
+        Returns:        
+            tuple: A tuple (row, col) representing the board square, or None if outside the board.
+        """
+        mx, my = pos
+        if not self.board_rect.collidepoint(mx, my):
+            return None
+        size = self.board_rect.width // 8
+        col = (mx - self.board_rect.x) // size
+        row = (my - self.board_rect.y) // size
+        return int(row), int(col)
+
+    def is_mouse_over_piece(self, chessboard):
+        """
+        Return True if mouse is over a non-empty square.
+        Args:
+            chessboard (Chessboard): The chessboard object containing the game state.       
+        Returns:
+            bool: True if mouse is over a piece, False otherwise.
+        """
+        mouse_pos = pygame.mouse.get_pos()
+        sq = self.get_square_from_pos(mouse_pos)
+        if not sq:
+            return False
+        r, c = sq
+        try:
+            return chessboard.board[r][c] != "--"
+        except Exception:
+            return False
+
+    def update_cursor(self, chessboard):
+        """
+        Set cursor:
+          - closed-hand substitute when holding a piece (self.hand != None)
+          - open-hand when hovering a piece
+          - default arrow otherwise
+        """
+        if self.hand:
+            cur = assets.CURSSOR["close_hand"]
+        elif self.is_mouse_over_piece(chessboard):
+            cur = assets.CURSSOR["open_hand"]
+        else:
+            cur = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_ARROW)    # default
+        pygame.mouse.set_cursor(cur)
+
     def draw(self, display, chessboard):
         """
-        Draws the chessboard and pieces on the given display surface.
+        Draws the entire board, pieces, highlights, and any active piece being moved.
         Args:
-            display (pygame.Surface): The surface to draw the board and pieces on.
+            display (pygame.Surface): The surface to draw everything on.    
             chessboard (Chessboard): The chessboard object containing the game state.
         """
-
         self.draw_board(display)
         self.draw_highlight(display)
         self.draw_pieces(display, chessboard)
@@ -146,4 +193,4 @@ class Board():
         self.draw_hover(display)
         self.draw_hand(display)
 
-      
+        self.update_cursor(chessboard)

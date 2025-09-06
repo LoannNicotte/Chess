@@ -9,6 +9,7 @@ pygame.init()
 pygame.display.set_mode((1, 1))
 
 ASSETS = {}
+CURSSOR =  {}
 
 # Load piece images
 for name in os.listdir("assets/pieces"):
@@ -25,3 +26,12 @@ ASSETS["highlight"] = pygame.image.load("assets/board/highlight.png").convert_al
 ASSETS["moove"] = pygame.image.load("assets/board/moove.png").convert_alpha()
 ASSETS["hover"] = pygame.image.load("assets/board/hover.png").convert_alpha()
 ASSETS["capture"] = pygame.image.load("assets/board/capture.png").convert_alpha()
+
+
+# Load cursor images
+for name in os.listdir("assets/cursors"):
+    path = os.path.join("assets/cursors/"+ name)
+    img = pygame.image.load(path).convert_alpha()
+    img = pygame.transform.smoothscale(img, (32, 32))   
+    CURSSOR[name[:len(name)-4]] = pygame.cursors.Cursor((16, 16), img)
+
