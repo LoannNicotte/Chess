@@ -22,5 +22,6 @@ ASSETS["board"] = pygame.image.load("assets/board/board.png").convert()
 
 # Load highlight, hint, and hover images
 ASSETS["highlight"] = pygame.image.load("assets/board/highlight.png").convert_alpha()
-ASSETS["hint"] = pygame.image.load("assets/board/hint.png").convert_alpha()
+ASSETS["moove"] = pygame.image.load("assets/board/moove.png").convert_alpha()
 ASSETS["hover"] = pygame.image.load("assets/board/hover.png").convert_alpha()
+ASSETS["capture"] = pygame.image.load("assets/board/capture.png").convert_alpha()
